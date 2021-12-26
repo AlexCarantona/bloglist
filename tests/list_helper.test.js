@@ -9,7 +9,7 @@ test("dummy returns one", () => {
 
 const listWithOneBlog = [{
   title: 'One sample',
-  likes: 5,
+  likes: 8,
   author: 'A'
 }];
 
@@ -35,11 +35,11 @@ describe("Total likes", () => {
   });
   test("In a one element list, the total likes equal those of the element", () => {
     const total = listHelper.totalLikes(listWithOneBlog);
-    expect(total).toBe(5)
+    expect(total).toBe(8)
   });
   test("In a list with several elements, the total likes are a sum", () => {
     const total = listHelper.totalLikes(extendedBlogList);
-    expect(total).toBe(15)
+    expect(total).toBe(18)
   });
 });
 
@@ -60,5 +60,12 @@ describe("Most blogs", () => {
   test("A has the most blogs (2)", () => {
     const author = listHelper.mostBlogs(extendedBlogList);
     expect(author).toEqual({author: 'A', blogs: 2})
+  })
+});
+
+describe("Most Likes", () => {
+  test("A has the most likes (10)", () => {
+    const author = listHelper.mostLikes(extendedBlogList);
+    expect(author).toEqual({author: 'A', likes: 10})
   })
 });

@@ -16,14 +16,25 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) return undefined;
-  const authorsAndBlogs = _.map(_.groupBy(blogs, 'author'), (blog, index) =>
-  {return {author: index, blogs: blog.length }});
+  const authorsAndBlogs = _.map(_.groupBy(blogs, 'author'), (blogArray, index) =>
+  {return {author: index, blogs: blogArray.length }});
   return _.orderBy(authorsAndBlogs, 'blogs', 'desc')[0]
 };
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return undefined;
+  const authorsAndLikes = _.map(_.groupBy(blogs, 'author'), (blogArray, index) =>
+  {return {
+    author: index,
+    likes: _.reduce(_.map(blogArray, 'likes'), (sum, res) => sum + res, 0),
+  }});
+  return _.orderBy(authorsAndLikes, 'likes', 'desc')[0]
+}
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };
