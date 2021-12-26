@@ -20,7 +20,11 @@ const logger = require('./utils/logger');
 // DB connection management
 logger.info("Connecting to remote MongoDB URI");
 
-mongoose.connect(config.MONGODB_URI)
+const MONGODB_URI = process.env.NODE_ENV === 'test'
+? config.MONGODB_URI
+: config.MONGODB_URI_TEST;
+
+mongoose.connect(MONGODB_URI)
 .then(success => logger.info("Succesfully connected to MongoDB remote."))
 .catch(error => logger.error("Error connecting to remote MongoDB", error));
 

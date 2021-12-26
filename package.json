@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "dev": "nodemon ."
+    "start": "NODE_ENV=production node index.js",
+    "test": "jest --verbose --runInBand",
+    "dev": "NODE_ENV=development nodemon index.js"
   },
   "author": "Alejandro Carantoña",
   "license": "ISC",
@@ -19,7 +20,8 @@
   },
   "devDependencies": {
     "jest": "^27.4.5",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
   },
   "jest": {
     "testEnvironment": "node"
