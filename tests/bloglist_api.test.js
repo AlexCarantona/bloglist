@@ -71,6 +71,17 @@ test('A post request without likes field defaults to 0', async () => {
   expect(res.body.likes).toEqual(0);
 })
 
+test('A post request without title or url fails to pass validation', async () => {
+  const newBlog = {
+    author: "Me",
+    likes: 5
+  };
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 });
