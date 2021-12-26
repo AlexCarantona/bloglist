@@ -7,23 +7,24 @@ test("dummy returns one", () => {
   expect(result).toBe(1)
 });
 
+const listWithOneBlog = [{
+  title: 'One sample',
+  likes: 5
+}];
+
+const extendedBlogList = [{
+  title: 'Two samples first',
+  likes: 8
+},
+{
+  title: "Three samples",
+  likes: 2
+}
+].concat(listWithOneBlog);
+
+const emptyList = [];
+
 describe("Total likes", () => {
-  const listWithOneBlog = [{
-    title: 'One sample',
-    likes: 5
-  }];
-
-  const extendedBlogList = [{
-    title: 'Two samples first',
-    likes: 8
-  },
-  {
-    title: "Three samples",
-    likes: 2
-  }
-  ].concat(listWithOneBlog);
-
-  const emptyList = [];
 
   test("An empty list returns zero", () => {
     const total = listHelper.totalLikes(emptyList)
@@ -37,6 +38,19 @@ describe("Total likes", () => {
     const total = listHelper.totalLikes(extendedBlogList);
     expect(total).toBe(15)
   });
+
+describe("Favorite blog", () => {
+
+  test("An array of blogs return the one with more likes", () => {
+    const fav = listHelper.favoriteBlog(extendedBlogList);
+    expect(fav.title).toEqual('Two samples first');
+  });
+
+  test("An empty array returns undefined", () => {
+    const fav = listHelper.favoriteBlog(emptyList);
+    expect(fav).toBe(undefined);
+  })
+});
 
 
 })
