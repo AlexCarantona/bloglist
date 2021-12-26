@@ -82,6 +82,15 @@ test('A post request without title or url fails to pass validation', async () =>
     .expect(400)
 })
 
+test('A delete call deletes a single blog post', async () => {
+  const randomFetch = await Blog.findOne({});
+  await api.delete(`/api/blogs/${randomFetch.id}`)
+    .expect(204);
+
+  const updatedList = await Blog.find({});
+  expect(updatedList).toHaveLength(initialBlogs.length - 1);
+})
+
 afterAll(() => {
   mongoose.connection.close()
 });
