@@ -84,11 +84,23 @@ test('A post request without title or url fails to pass validation', async () =>
 
 test('A delete call deletes a single blog post', async () => {
   const randomFetch = await Blog.findOne({});
-  await api.delete(`/api/blogs/${randomFetch.id}`)
+  await api.delete(`/api/blogs/${randomFetch._id.toString()}`)
     .expect(204);
 
   const updatedList = await Blog.find({});
   expect(updatedList).toHaveLength(initialBlogs.length - 1);
+})
+
+test('A put call to increase the likes by one', async () => {
+  const randomFetch = await Blog.findOne({});
+  console.log(randomFetch);
+  await api.put(`/api/blogs/${randomFetch._id.toString()}`)
+    .send({likes: randomFetch.likes + 1})
+    .expect(200)
+
+  const updatedFetch = await Blog.findById(randomFetch._id.toString());
+  expect(updatedFetch.likes).toEqual(randomFetch.likes + 1)
+
 })
 
 afterAll(() => {
