@@ -1,47 +1,19 @@
-require('dotenv').config();
-const express = require('express')
-const app = express()
+// Server
+const http = require('http')
+
+// App
+const app = require('./app')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: {
-    type: Number,
-    default: 0
-  }
-})
+// Utils
+const logger = require('./utils/logger') // Logging.
+const config = require('./utils/config') // Configuration.
 
-const Blog = mongoose.model('Blog', blogSchema)
 
-mongoose.connect(process.env.MONGODB_URI)
-.then(success => console.log("Succesfully connected to MongoDB remote."))
-.catch(error => console.error("Error connecting to remote MongoDB", error));
+// Server setup
+const server = http.createServer(app);
 
-app.use(cors())
-app.use(express.json())
-
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
-
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+server.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
