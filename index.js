@@ -1,4 +1,4 @@
-const http = require('http')
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -8,13 +8,17 @@ const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
   url: String,
-  likes: Number
+  likes: {
+    type: Number,
+    default: 0
+  }
 })
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-const mongoUrl = 'mongodb://localhost/bloglist'
-mongoose.connect(mongoUrl)
+mongoose.connect(process.env.MONGODB_URI)
+.then(success => console.log("Succesfully connected to MongoDB remote."))
+.catch(error => console.error("Error connecting to remote MongoDB", error));
 
 app.use(cors())
 app.use(express.json())
