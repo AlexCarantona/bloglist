@@ -37,7 +37,27 @@ test('The _id field is substituted by id property in returned JSON', async () =>
   expect(response.body[0].id).toBeDefined();
   expect(response.body[0]._id).not.toBeDefined();
   expect(response.body[0].__v).not.toBeDefined();
-})
+});
+
+test('A post request creates a new blog entry', async () => {
+  const newBlog = {
+    title: "Conjuring Archive",
+    author: "Denis Behr",
+    url: "https://www.conjuringarchive.com/",
+    likes: 1
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title);
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1);
+  expect(titles).toContain("Conjuring Archive");
+});
 
 afterAll(() => {
   mongoose.connection.close()
