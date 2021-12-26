@@ -9,16 +9,19 @@ test("dummy returns one", () => {
 
 const listWithOneBlog = [{
   title: 'One sample',
-  likes: 5
+  likes: 5,
+  author: 'A'
 }];
 
 const extendedBlogList = [{
   title: 'Two samples first',
-  likes: 8
+  likes: 8,
+  author: 'B'
 },
 {
   title: "Three samples",
-  likes: 2
+  likes: 2,
+  author: 'A'
 }
 ].concat(listWithOneBlog);
 
@@ -38,6 +41,7 @@ describe("Total likes", () => {
     const total = listHelper.totalLikes(extendedBlogList);
     expect(total).toBe(15)
   });
+});
 
 describe("Favorite blog", () => {
 
@@ -52,5 +56,9 @@ describe("Favorite blog", () => {
   })
 });
 
-
-})
+describe("Most blogs", () => {
+  test("A has the most blogs (2)", () => {
+    const author = listHelper.mostBlogs(extendedBlogList);
+    expect(author).toEqual({author: 'A', blogs: 2})
+  })
+});
