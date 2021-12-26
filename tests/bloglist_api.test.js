@@ -45,7 +45,7 @@ test('A post request creates a new blog entry', async () => {
     author: "Denis Behr",
     url: "https://www.conjuringarchive.com/",
     likes: 1
-  }
+  };
   await api
     .post('/api/blogs')
     .send(newBlog)
@@ -58,6 +58,18 @@ test('A post request creates a new blog entry', async () => {
   expect(response.body).toHaveLength(initialBlogs.length + 1);
   expect(titles).toContain("Conjuring Archive");
 });
+
+test('A post request without likes field defaults to 0', async () => {
+  const newBlog = {
+    title: "El Comercio",
+    author: "VV.AA.",
+    url: "https://elcomercio.es"
+  };
+
+  const res = await api.post('/api/blogs').send(newBlog);
+  expect(res.body.likes).toBeDefined();
+  expect(res.body.likes).toEqual(0);
+})
 
 afterAll(() => {
   mongoose.connection.close()
