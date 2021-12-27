@@ -5,10 +5,11 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A title is needed.']
   },
-  author: {
+  user: {
     type: mongoose.Types.ObjectId,
     ref: 'User'
   },
+  author: String,
   url: {
     type: String,
     required: [true, 'A url is needed.']

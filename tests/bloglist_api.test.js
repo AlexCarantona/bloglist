@@ -36,7 +36,7 @@ describe("Blog endpoint operations", () => {
     const blogInserts = initialBlogs.map(blog =>
       Blog.create(
         {...blog,
-          author: mongoose.Types.ObjectId(dummyUser._id)
+          user: mongoose.Types.ObjectId(dummyUser._id)
         })
     )
     await Promise.all(blogInserts);

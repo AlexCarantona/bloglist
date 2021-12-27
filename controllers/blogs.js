@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 blogsRouter.get('/', async (req, res) => {
   const listOfBlogs = await Blog.find({})
-    .populate('author', {username: 1, name: 1});
+    .populate('user', {username: 1, name: 1});
   res.json(listOfBlogs);
 });
 
@@ -17,7 +17,7 @@ blogsRouter.post('/', async (req, res) => {
 
   const blog = new Blog({
     ...body,
-    author: mongoose.Types.ObjectId(req.user.id)
+    user: mongoose.Types.ObjectId(req.user.id)
   });
   const savedBlog = await blog.save();
 
@@ -36,8 +36,8 @@ blogsRouter.delete('/:id', async (req, res) => {
     return res.status(401).json({ error: 'you need a token to do this'})
   }
 
-  const blogAuthor = await Blog.findById(blogId);
-  if (blogAuthor.author.toString() !== req.user.id) {
+  const blogUser = await Blog.findById(blogId);
+  if (blogUser.user.toString() !== req.user.id) {
     return res.status(401).json({ error: 'only authors can delete their blogs'})
   };
 
