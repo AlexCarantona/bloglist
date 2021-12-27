@@ -18,6 +18,14 @@ const tokenExtractor = (req, res, next) => {
   next()
 };
 
+const userExtractor = (req, res, next) => {
+  if (req.token) {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET);
+    req.user = decodedToken;
+  }
+  next();
+};
+
 const errorHandler = (error, req, res, next) => {
   logger.error(error);
 
@@ -45,5 +53,6 @@ module.exports = {
   requestLogger,
   errorHandler,
   unknownEndpoint,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor
 }

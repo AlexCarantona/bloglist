@@ -42,6 +42,7 @@ app.use(middleware.requestLogger);
 
 //Middleware to handle tokens
 app.use(middleware.tokenExtractor);
+app.use(middleware.userExtractor);
 
 // Routing
 app.use('/api/blogs/', blogsRouter);
