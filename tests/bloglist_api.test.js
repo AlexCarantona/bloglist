@@ -1,22 +1,21 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
+const Blog = require('../models/Blog');
+const User = require('../models/User');
 
 const api = supertest(app);
 
 
 describe("Blog endpoint operations", () => {
-  const Blog = require('../models/Blog');
   const initialBlogs = [
     {
       title: "The Jerx",
-      author: "Andy Jerx",
       url: "https://www.thejerx.com/",
       likes: 34
     },
     {
       title: "Vanishing INC blog",
-      author: "Andy Gladwin",
       url: "https://www.vanishingincmagic.com/blog/"
     }
   ];
@@ -26,6 +25,16 @@ describe("Blog endpoint operations", () => {
     await blogObject.save();
     blogObject = new Blog(initialBlogs[1]);
     await blogObject.save();
+    userObject = new User({
+      username: 'alex',
+      password: '98510985'
+    });
+    await userObject.save();
+  })
+
+  afterEach(async() => {
+    await Blog.deleteMany({});
+    await User.deleteMany({});
   })
 
   test('The _id field is substituted by id property in returned JSON', async () => {
@@ -38,7 +47,6 @@ describe("Blog endpoint operations", () => {
   test('A post request creates a new blog entry', async () => {
     const newBlog = {
       title: "Conjuring Archive",
-      author: "Denis Behr",
       url: "https://www.conjuringarchive.com/",
       likes: 1
     };
@@ -58,7 +66,6 @@ describe("Blog endpoint operations", () => {
   test('A post request without likes field defaults to 0', async () => {
     const newBlog = {
       title: "El Comercio",
-      author: "VV.AA.",
       url: "https://elcomercio.es"
     };
 
@@ -69,7 +76,6 @@ describe("Blog endpoint operations", () => {
 
   test('A post request without title or url fails to pass validation', async () => {
     const newBlog = {
-      author: "Me",
       likes: 5
     };
 
@@ -99,10 +105,13 @@ describe("Blog endpoint operations", () => {
   })
 });
 
-describe.only('User endpoint operations', () => {
-  const User = require('../models/User');
+describe('User endpoint operations', () => {
 
   beforeEach( async () => {
+    await User.deleteMany({})
+  });
+
+  afterEach( async () => {
     await User.deleteMany({})
   });
 

@@ -5,11 +5,15 @@ const config = require('./utils/config')
 // Express
 const express = require('express')
 const app = express()
+
 // Express middleware
 const cors = require('cors');
+require('express-async-errors');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
 const middleware = require('./utils/middleware');
+
 // DB connection
 const mongoose = require('mongoose');
 
@@ -39,6 +43,7 @@ app.use(middleware.requestLogger);
 // Routing
 app.use('/api/blogs/', blogsRouter);
 app.use('/api/users/', usersRouter);
+app.use('/api/login', loginRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
