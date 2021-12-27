@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node index.js",
-    "test": "jest --verbose --runInBand",
-    "dev": "NODE_ENV=development nodemon index.js"
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "dev": "NODE_ENV=test nodemon index.js"
   },
   "author": "Alejandro Carantoña",
   "license": "ISC",

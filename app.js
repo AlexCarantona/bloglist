@@ -22,8 +22,8 @@ const logger = require('./utils/logger');
 logger.info("Connecting to remote MongoDB URI");
 
 const MONGODB_URI = process.env.NODE_ENV === 'test'
-? config.MONGODB_URI
-: config.MONGODB_URI_TEST;
+? config.MONGODB_URI_TEST
+: config.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
 .then(success => logger.info("Succesfully connected to MongoDB remote."))
@@ -38,7 +38,7 @@ app.use(middleware.requestLogger);
 
 // Routing
 app.use('/api/blogs/', blogsRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/users/', usersRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 

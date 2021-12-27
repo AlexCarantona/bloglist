@@ -11,8 +11,8 @@ usersRouter.get('/', async (req, res, next) => {
 
 usersRouter.post('/', async (req, res, next) => {
   try {
-    console.log(req.body);
     const body = req.body;
+    if (!body.password || body.password.length <= 3) res.status(400).send({error: 'invalid password'});
     const passwordHash = await bcrypt.hash(body.password, 10);
 
     const user = new User({
