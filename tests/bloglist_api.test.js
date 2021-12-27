@@ -102,6 +102,10 @@ describe("Blog endpoint operations", () => {
 describe.only('User endpoint operations', () => {
   const User = require('../models/User');
 
+  beforeEach( async () => {
+    await User.deleteMany({})
+  });
+
   test("A user without valid password will not pass validation", async () => {
     const badUser = {
       name: "Bad"

@@ -1,17 +1,30 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/Blog');
+const User = require('../models/User');
+const mongoose = require('mongoose');
 
 blogsRouter.get('/', async (req, res, next) => {
   try {
-    const listOfBlogs = await Blog.find({});
+    const listOfBlogs = await Blog.find({})
+      .populate('author', {username: 1, name: 1});
     res.json(listOfBlogs);
   } catch(error){next(error)}
 });
 
 blogsRouter.post('/', async (req, res, next) => {
   try {
-    const blog = new Blog(req.body);
+    const randomUser = await User.findOne({});
+
+    const blog = new Blog({
+      ...req.body,
+      author: mongoose.Types.ObjectId(randomUser.id)
+    });
     const savedBlog = await blog.save();
+
+    await User.findByIdAndUpdate(randomUser.id,
+      {
+        blogs: randomUser.blogs.concat(mongoose.Types.ObjectId(savedBlog))
+      });
     res.status(201).json(savedBlog)
   } catch(error) {next(error)}
 });
