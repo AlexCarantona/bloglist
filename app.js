@@ -40,6 +40,9 @@ app.use(express.json());
 //Middleware to display information
 app.use(middleware.requestLogger);
 
+//Middleware to handle tokens
+app.use(middleware.tokenExtractor);
+
 // Routing
 app.use('/api/blogs/', blogsRouter);
 app.use('/api/users/', usersRouter);

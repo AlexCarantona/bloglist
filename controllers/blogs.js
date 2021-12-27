@@ -10,17 +10,9 @@ blogsRouter.get('/', async (req, res) => {
   res.json(listOfBlogs);
 });
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer')){
-    return authorization.substring(7)
-  }
-  return null
-}
-
 blogsRouter.post('/', async (req, res) => {
   const body = req.body;
-  const token = getTokenFrom(req);
+  const token = req.token;
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!token || !decodedToken.id) {
     return res.status(401).json({ error: 'you need a token to do this'})
@@ -42,8 +34,20 @@ blogsRouter.post('/', async (req, res) => {
 });
 
 blogsRouter.delete('/:id', async (req, res) => {
-  const id = req.params.id;
-  const delBlog = await Blog.findByIdAndDelete(id);
+  const blogId = req.params.id;
+
+  const token = req.token;
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!token || !decodedToken.id) {
+    return res.status(401).json({ error: 'you need a token to do this'})
+  }
+
+  const blogAuthor = await Blog.findById(blogId);
+  if (blogAuthor.author.toString() !== decodedToken.id) {
+    return res.status(401).json({ error: 'only authors can delete their blogs'})
+  };
+
+  const delBlog = await Blog.findByIdAndDelete(blogId);
   res.status(204).end()
 });
 
