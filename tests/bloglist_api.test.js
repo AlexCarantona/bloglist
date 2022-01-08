@@ -134,6 +134,20 @@ describe("Blog endpoint operations", () => {
     expect(updatedFetch.likes).toEqual(randomFetch.likes + 1)
 
   })
+
+  test('A post call to the comment endpoint adds a comment', async () => {
+    const randomFetch = await Blog.findOne({})
+    await api
+      .post(`/api/blogs/${randomFetch._id.toString()}/comments`)
+      .set('Authorization', `bearer ${dummyUser.token}`)
+      .send({comment: 'I love this stuff'})
+      .expect(200)
+
+    const updatedFetch = await Blog.findById(randomFetch._id.toString())
+    expect(updatedFetch.comments).toBeDefined()
+    expect(updatedFetch.comments).toHaveLength(1)
+    expect(updatedFetch.comments).toEqual(['I love this stuff'])
+  })
 });
 
 describe('User endpoint operations', () => {

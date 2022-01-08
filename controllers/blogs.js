@@ -29,6 +29,24 @@ blogsRouter.post('/', async (req, res) => {
   res.status(201).json(savedBlog)
 });
 
+blogsRouter.post('/:id/comments', async (req, res) => {
+  const body = req.body;
+  if (!req.token || !req.user.id) {
+    return res.status(401).json({ error: 'you need a token to do this'})
+  }
+
+  const comment = body.comment
+  const blogId = req.params.id
+
+  const commented = await Blog.findByIdAndUpdate(
+    blogId,
+    {$push : {comments: comment}},
+    {new: true}
+  )
+
+  res.status(200).json(commented)
+})
+
 blogsRouter.delete('/:id', async (req, res) => {
   const blogId = req.params.id;
 
